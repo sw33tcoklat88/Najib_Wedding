@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ms">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0074)file:///C:/Users/sw33t/Downloads/index_wedding_wish_calendar_whatsapp.html -->
+<html lang="ms" style="--vh100: 917px;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
 <title>Walimatul Urus • Najib &amp; Norasikin</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500;1,600&family=Amiri:wght@400;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="file:///C:/Users/sw33t/Downloads/index_files/css2" rel="stylesheet">
 <style>
   :root{
     --cream:#f7f2e9;
@@ -341,6 +341,145 @@
   .savedate .big-date{ font-family:'Cormorant Garamond'; font-size:clamp(1.7rem,7vw,2.5rem); font-style:italic; margin:6px 0; }
   .savedate p{ font-size:clamp(.78rem,3.4vw,.85rem); color:var(--ink-soft); line-height:1.85; max-width:270px; margin:10px auto 0; }
 
+
+  /* ---------- guest wishes + event actions (additive; preserves original visual language) ---------- */
+  .action-row{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    flex-wrap:wrap; margin-top:12px;
+  }
+  .action-row .map-btn{ margin-top:0; }
+  .calendar-btn{
+    appearance:none; -webkit-appearance:none; cursor:pointer;
+    font-family:'Jost',sans-serif;
+  }
+
+  .wish-wrap{ width:100%; max-width:420px; perspective:1500px; }
+  .wish-card{
+    position:relative;
+    width:100%;
+    background:linear-gradient(165deg,#fffdf8,var(--cream-2));
+    border:1px solid rgba(179,144,78,.32);
+    border-radius:16px;
+    padding:clamp(30px,8vw,42px) clamp(20px,6vw,30px);
+    box-shadow:0 8px 20px -8px rgba(40,55,70,.18), 0 30px 55px -25px rgba(40,55,70,.35);
+    transform:rotateX(30deg) translateY(50px) scale(.9);
+    opacity:0;
+    transition:transform 1s cubic-bezier(.2,.8,.2,1), opacity 1s ease;
+    transform-style:preserve-3d;
+  }
+  .wish-card.in{ transform:rotateX(0deg) translateY(0) scale(1); opacity:1; }
+  .wish-card:before,.wish-card:after{
+    content:''; position:absolute; width:16px; height:16px;
+    border:1px solid var(--gold); opacity:.7; pointer-events:none;
+  }
+  .wish-card:before{ top:10px; left:10px; border-right:none; border-bottom:none; }
+  .wish-card:after{ bottom:10px; right:10px; border-left:none; border-top:none; }
+  .wish-card h2{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.45rem,6vw,1.85rem);
+    font-weight:500; margin:8px 0 6px;
+  }
+  .wish-card .wish-intro{
+    max-width:330px; margin:0 auto 22px; line-height:1.75;
+    font-size:clamp(.78rem,3.4vw,.86rem); color:var(--ink-soft);
+  }
+  .wish-field{ text-align:left; margin-top:13px; }
+  .wish-field label{
+    display:block; margin:0 0 7px 2px;
+    font-size:.64rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--gold-deep); font-weight:500;
+  }
+  .wish-field input,.wish-field textarea{
+    width:100%; border:1px solid rgba(179,144,78,.38);
+    background:rgba(255,255,255,.7); color:var(--ink);
+    border-radius:12px; padding:12px 14px;
+    font:400 .86rem/1.55 'Jost',sans-serif;
+    outline:none; box-shadow:inset 0 1px 0 rgba(255,255,255,.55);
+    transition:border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .wish-field textarea{ min-height:112px; resize:vertical; }
+  .wish-field input:focus,.wish-field textarea:focus{
+    border-color:var(--gold);
+    background:#fffdf8;
+    box-shadow:0 0 0 3px rgba(179,144,78,.12);
+  }
+  .wish-field .counter{
+    display:block; text-align:right; margin-top:5px;
+    font-size:.6rem; color:var(--ink-soft);
+  }
+  .wish-submit{
+    width:100%; justify-content:center; margin-top:18px;
+  }
+  .wish-note{
+    margin-top:10px; min-height:1.4em;
+    font-size:.68rem; line-height:1.5; color:var(--ink-soft);
+  }
+
+  .wish-success{
+    position:fixed; inset:0; z-index:80;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    background:rgba(40,55,70,.28);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    opacity:0; visibility:hidden; pointer-events:none;
+    transition:opacity .35s ease, visibility .35s ease;
+  }
+  .wish-success.show{ opacity:1; visibility:visible; pointer-events:auto; }
+  .wish-success-card{
+    position:relative; overflow:hidden;
+    width:min(88vw,340px); min-height:280px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:34px 26px;
+    border:1px solid rgba(232,211,162,.8);
+    border-radius:20px;
+    background:
+      radial-gradient(circle at 30% 10%,rgba(255,255,255,.85),transparent 34%),
+      linear-gradient(155deg,#fffdf8,var(--cream-2));
+    box-shadow:0 30px 70px rgba(40,55,70,.35), inset 0 1px 0 rgba(255,255,255,.9);
+    transform:perspective(900px) rotateX(-28deg) rotateY(38deg) translateY(34px) scale(.72);
+    opacity:0;
+    transition:transform .72s cubic-bezier(.18,.86,.28,1.2), opacity .45s ease;
+    transform-style:preserve-3d;
+  }
+  .wish-success.show .wish-success-card{
+    transform:perspective(900px) rotateX(0) rotateY(0) translateY(0) scale(1);
+    opacity:1;
+  }
+  .wish-success-card:before{
+    content:''; position:absolute; inset:-35%;
+    background:conic-gradient(from 0deg,transparent 0 18%,rgba(232,211,162,.35) 22%,transparent 27% 48%,rgba(215,230,239,.5) 53%,transparent 58% 100%);
+    animation:wishHalo 5s linear infinite;
+  }
+  .wish-success-card > *{ position:relative; z-index:1; }
+  .wish-success-seal{
+    width:74px; height:74px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:#fff8ea;
+    background:radial-gradient(circle at 35% 28%,var(--gold-light),var(--gold) 62%,var(--gold-deep));
+    box-shadow:0 16px 28px -10px rgba(90,68,20,.5), inset 0 2px 4px rgba(255,255,255,.55);
+    transform:translateZ(42px);
+    animation:wishSeal 1.5s ease-in-out infinite;
+  }
+  .wish-success-seal svg{ width:34px; height:34px; }
+  .wish-success-card h3{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.65rem; font-weight:500; margin:18px 0 5px;
+    transform:translateZ(24px);
+  }
+  .wish-success-card p{
+    margin:0; max-width:240px; color:var(--ink-soft);
+    font-size:.78rem; line-height:1.65; transform:translateZ(16px);
+  }
+  @keyframes wishHalo{ to{ transform:rotate(360deg); } }
+  @keyframes wishSeal{ 0%,100%{ transform:translateZ(42px) scale(1); } 50%{ transform:translateZ(52px) scale(1.06); } }
+
+  .sr-only{
+    position:absolute!important; width:1px!important; height:1px!important;
+    padding:0!important; margin:-1px!important; overflow:hidden!important;
+    clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important;
+  }
+
   /* CLOSING */
   .closing .arabic{ font-size:1.3rem; }
   .closing h3{ font-family:'Cormorant Garamond'; font-weight:500; font-size:clamp(1.3rem,5.5vw,1.6rem); margin:12px 0 4px; }
@@ -405,17 +544,17 @@
   }
 </style>
 </head>
-<body>
+<body style="overflow: hidden;">
 
 <div class="bg-glow"></div>
 <div class="grain"></div>
-<div class="bg-star" id="bgStar">
+<div class="bg-star" id="bgStar" style="transform: rotate(73.1667deg) translateY(146.333px);">
   <svg viewBox="0 0 200 200"><g fill="none" stroke="#b3904e" stroke-width=".4">
-    <circle cx="100" cy="100" r="90"/><circle cx="100" cy="100" r="70"/>
-    <g id="rays"></g>
+    <circle cx="100" cy="100" r="90"></circle><circle cx="100" cy="100" r="70"></circle>
+    <g id="rays"><line x1="100" y1="10" x2="100" y2="30" transform="rotate(0 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(22.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(45 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(67.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(90 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(112.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(135 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(157.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(180 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(202.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(225 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(247.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(270 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(292.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(315 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(337.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(0 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(22.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(45 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(67.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(90 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(112.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(135 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(157.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(180 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(202.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(225 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(247.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(270 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(292.5 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(315 100 100)"></line><line x1="100" y1="10" x2="100" y2="30" transform="rotate(337.5 100 100)"></line></g>
   </g></svg>
 </div>
-<div class="petals" id="petals"></div>
+<div class="petals" id="petals"><div class="petal" style="left: 71.5477vw; --drift: -14.468156276055481px; animation-duration: 11.1838s; animation-delay: 6.55656s; opacity: 0.532063; transform: scale(1.11806);"></div><div class="petal" style="left: 5.34732vw; --drift: -33.41743352064475px; animation-duration: 14.5345s; animation-delay: 2.4366s; opacity: 0.270856; transform: scale(0.892274);"></div><div class="petal" style="left: 53.1009vw; --drift: -4.405131124290811px; animation-duration: 19.6796s; animation-delay: 0.00972675s; opacity: 0.407808; transform: scale(0.615089);"></div><div class="petal" style="left: 91.8237vw; --drift: 32.13386709583021px; animation-duration: 16.0151s; animation-delay: 5.17483s; opacity: 0.379514; transform: scale(0.629228);"></div><div class="petal" style="left: 51.0052vw; --drift: 17.246950178037125px; animation-duration: 19.3737s; animation-delay: 5.43757s; opacity: 0.364182; transform: scale(0.677876);"></div><div class="petal" style="left: 53.6658vw; --drift: -16.997452397914756px; animation-duration: 12.5575s; animation-delay: 0.442919s; opacity: 0.542492; transform: scale(0.659061);"></div><div class="petal" style="left: 12.2571vw; --drift: -29.52980747256392px; animation-duration: 18.7611s; animation-delay: 4.88712s; opacity: 0.464026; transform: scale(0.705565);"></div><div class="petal" style="left: 71.9129vw; --drift: -30.08756411210569px; animation-duration: 17.739s; animation-delay: 8.6575s; opacity: 0.286471; transform: scale(0.568118);"></div><div class="petal" style="left: 30.1458vw; --drift: 22.791954854181007px; animation-duration: 11.6942s; animation-delay: 0.673412s; opacity: 0.260156; transform: scale(0.879789);"></div><div class="petal" style="left: 90.3678vw; --drift: 20.17175470571938px; animation-duration: 17.477s; animation-delay: 2.23172s; opacity: 0.273697; transform: scale(0.701854);"></div><div class="petal" style="left: 3.4628vw; --drift: 36.12086113912861px; animation-duration: 15.6106s; animation-delay: 4.18035s; opacity: 0.405652; transform: scale(0.760373);"></div><div class="petal" style="left: 9.59816vw; --drift: -8.038405536134885px; animation-duration: 15.419s; animation-delay: 2.0902s; opacity: 0.382838; transform: scale(0.624173);"></div><div class="petal" style="left: 39.6626vw; --drift: 8.299318621809057px; animation-duration: 16.18s; animation-delay: 6.23056s; opacity: 0.279003; transform: scale(1.22613);"></div><div class="petal" style="left: 31.3783vw; --drift: -5.035748111698467px; animation-duration: 16.8989s; animation-delay: 7.28591s; opacity: 0.455067; transform: scale(0.646698);"></div><div class="petal" style="left: 20.2702vw; --drift: -3.93760463018765px; animation-duration: 16.6405s; animation-delay: 4.69341s; opacity: 0.260911; transform: scale(0.977761);"></div><div class="petal" style="left: 44.9858vw; --drift: -12.198381790349249px; animation-duration: 12.4447s; animation-delay: 9.20547s; opacity: 0.565638; transform: scale(0.627778);"></div><div class="petal" style="left: 24.6823vw; --drift: 28.88600049192216px; animation-duration: 19.4151s; animation-delay: 2.62201s; opacity: 0.265874; transform: scale(1.29198);"></div><div class="petal" style="left: 49.0521vw; --drift: 38.77272356940685px; animation-duration: 12.723s; animation-delay: 0.34403s; opacity: 0.431795; transform: scale(1.26289);"></div><div class="petal" style="left: 32.3001vw; --drift: 9.327283268993781px; animation-duration: 10.6102s; animation-delay: 9.08305s; opacity: 0.292977; transform: scale(1.32472);"></div><div class="petal" style="left: 34.8514vw; --drift: -20.71016300922689px; animation-duration: 15.3822s; animation-delay: 2.91677s; opacity: 0.531837; transform: scale(1.04388);"></div><div class="petal" style="left: 31.6679vw; --drift: -36.54038441047554px; animation-duration: 12.468s; animation-delay: 2.1836s; opacity: 0.322152; transform: scale(1.13973);"></div><div class="petal" style="left: 60.6832vw; --drift: 11.986613871805318px; animation-duration: 10.7868s; animation-delay: 9.91975s; opacity: 0.586853; transform: scale(1.32788);"></div><div class="petal" style="left: 0.254907vw; --drift: -3.719896256041949px; animation-duration: 13.4767s; animation-delay: 5.06615s; opacity: 0.458797; transform: scale(0.825265);"></div><div class="petal" style="left: 22.6936vw; --drift: 29.324283192842387px; animation-duration: 11.5845s; animation-delay: 2.49707s; opacity: 0.277883; transform: scale(1.21405);"></div><div class="petal" style="left: 3.45886vw; --drift: 27.106239666538826px; animation-duration: 13.3792s; animation-delay: 7.66298s; opacity: 0.44903; transform: scale(0.968103);"></div><div class="petal" style="left: 1.29132vw; --drift: 9.481950407016733px; animation-duration: 11.918s; animation-delay: 1.32361s; opacity: 0.455112; transform: scale(0.999254);"></div><div class="petal" style="left: 29.5502vw; --drift: -2.207955668160899px; animation-duration: 10.5159s; animation-delay: 5.1362s; opacity: 0.558187; transform: scale(0.640696);"></div><div class="petal" style="left: 76.8054vw; --drift: -22.325253783628707px; animation-duration: 14.0207s; animation-delay: 6.49288s; opacity: 0.386773; transform: scale(0.865223);"></div><div class="petal" style="left: 41.5665vw; --drift: 19.406357503450486px; animation-duration: 19.4108s; animation-delay: 2.51549s; opacity: 0.361202; transform: scale(1.12932);"></div><div class="petal" style="left: 33.4756vw; --drift: 0.047975286911537296px; animation-duration: 13.29s; animation-delay: 4.09395s; opacity: 0.383518; transform: scale(0.773498);"></div><div class="petal" style="left: 28.3148vw; --drift: -34.72848876655158px; animation-duration: 12.0831s; animation-delay: 4.10809s; opacity: 0.284378; transform: scale(1.23459);"></div><div class="petal" style="left: 29.3785vw; --drift: 23.486064106655576px; animation-duration: 11.5921s; animation-delay: 9.03462s; opacity: 0.553768; transform: scale(0.942189);"></div></div>
 
 <!-- ENVELOPE INTRO -->
 <div id="envelope-screen">
@@ -441,7 +580,7 @@
     <div class="arabic bismillah shine">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
     <div class="eyebrow shine">Walimatul Urus</div>
     <div class="ornament-row"><span class="rule"></span>
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"></path></svg>
       <span class="rule"></span>
     </div>
     <h1 id="tiltName">
@@ -460,18 +599,29 @@
 
   <section class="event akad">
     <div class="card-stage">
-      <div class="event-card">
+      <div class="event-card in" style="transform: rotateX(-8deg) translateY(-18.0778px);">
         <div class="day-badge"><span>4</span></div>
         <h2>Akad Nikah</h2>
         <div class="date-line">Jumaat &nbsp;•&nbsp; 4 September 2026</div>
 
         <div class="detail-row">
-          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span>
           <span><b>8.00 pagi</b>Masa bermulanya akad nikah</span>
         </div>
         <div class="detail-row">
-          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s7-6.3 7-11.5A7 7 0 0 0 5 9.5C5 14.7 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg></span>
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s7-6.3 7-11.5A7 7 0 0 0 5 9.5C5 14.7 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.4"></circle></svg></span>
           <span><b>Masjid, Pejabat Agama Islam</b>Daerah Segamat</span>
+        </div>
+
+        <div class="action-row" aria-label="Tindakan Akad Nikah">
+          <a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=Masjid%20Pejabat%20Agama%20Islam%20Daerah%20Segamat" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.3 7-11.5A7 7 0 0 0 5 9.5C5 14.7 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.4"></circle></svg>
+            Google Maps
+          </a>
+          <button class="map-btn calendar-btn" type="button" data-calendar-event="akad">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M7 3v4M17 3v4M3 10h18M8 14h3M13 14h3M8 17h3"></path></svg>
+            Simpan Kalendar
+          </button>
         </div>
 
         <div class="divider" style="margin:18px auto 10px;"></div>
@@ -486,24 +636,30 @@
 
   <section class="event resepsi">
     <div class="card-stage">
-      <div class="event-card">
+      <div class="event-card in" style="transform: rotateX(-8deg) translateY(-12.0457px);">
         <div class="day-badge"><span>5</span></div>
         <h2>Majlis Resepsi</h2>
         <div class="date-line">Sabtu &nbsp;•&nbsp; 5 September 2026</div>
 
         <div class="detail-row">
-          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span>
           <span><b>10.30 pagi – 3.00 petang</b>Majlis dibuka untuk tetamu</span>
         </div>
         <div class="detail-row">
-          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s7-6.3 7-11.5A7 7 0 0 0 5 9.5C5 14.7 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg></span>
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s7-6.3 7-11.5A7 7 0 0 0 5 9.5C5 14.7 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.4"></circle></svg></span>
           <span><b>No. 437, Jalan Tembusu</b>Felda Medoi</span>
         </div>
 
-        <a class="map-btn" href="https://maps.app.goo.gl/Q4hhApuQHZq1kgeY9?g_st=ac" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.3 7-11.5A7 7 0 0 0 5 9.5C5 14.7 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>
-          Buka Lokasi di Google Maps
-        </a>
+        <div class="action-row" aria-label="Tindakan Majlis Resepsi">
+          <a class="map-btn" href="https://maps.app.goo.gl/Q4hhApuQHZq1kgeY9?g_st=ac" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.3 7-11.5A7 7 0 0 0 5 9.5C5 14.7 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.4"></circle></svg>
+            Google Maps
+          </a>
+          <button class="map-btn calendar-btn" type="button" data-calendar-event="resepsi">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M7 3v4M17 3v4M3 10h18M8 14h3M13 14h3M8 17h3"></path></svg>
+            Simpan Kalendar
+          </button>
+        </div>
 
         <div class="divider" style="margin:18px auto 10px;"></div>
         <div class="eyebrow" style="margin-bottom:10px;font-size:.62rem;">Tema Pakaian — Bersesuaian</div>
@@ -516,18 +672,52 @@
   </section>
 
   <section class="save-date">
-    <div class="savedate">
+    <div class="savedate in">
       <div class="eyebrow shine">Simpan Tarikh</div>
       <div class="big-date shine">27 Disember 2026</div>
       <p>In sha Allah, kenduri kahwin di pihak keluarga lelaki akan diadakan pada tarikh ini.
       Butiran penuh akan dikongsikan kemudian.</p>
+      <div class="action-row" style="margin-top:18px;">
+        <button class="map-btn calendar-btn" type="button" data-calendar-event="kenduri-lelaki">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M7 3v4M17 3v4M3 10h18M8 14h3M13 14h3M8 17h3"></path></svg>
+          Simpan &amp; Ingatkan
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="wishes">
+    <div class="wish-wrap">
+      <div class="wish-card">
+        <div class="eyebrow shine">Ucapan Buat Pengantin</div>
+        <h2>Tinggalkan Doa &amp; Ucapan</h2>
+        <p class="wish-intro">Tuliskan nama dan ucapan anda untuk Najib &amp; Norasikin.</p>
+        <p class="wish-intro" style="margin-top:4px;font-size:.75rem;"><a href="https://wa.me/60176306477" target="_blank" rel="noopener" style="color:var(--gold-deep);text-decoration:none;"></a></p>
+
+        <form id="wishForm" novalidate="">
+          <div class="wish-field">
+            <label for="guestName">Nama</label>
+            <input id="guestName" name="guestName" type="text" autocomplete="name" maxlength="60" required="" placeholder="Nama anda">
+          </div>
+          <div class="wish-field">
+            <label for="guestWish">Ucapan / Doa</label>
+            <textarea id="guestWish" name="guestWish" maxlength="320" required="" placeholder="Tulis ucapan dan doa buat pengantin..."></textarea>
+            <span class="counter" id="wishCounter" aria-live="polite">0 / 320</span>
+          </div>
+          <button class="map-btn calendar-btn wish-submit" type="submit" id="wishSubmit">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 2 11 13"></path><path d="m22 2-7 20-4-9-9-4Z"></path></svg>
+            Hantar Ucapan
+          </button>
+          <div class="wish-note" id="wishNote" role="status" aria-live="polite"></div>
+        </form>
+      </div>
     </div>
   </section>
 
   <section class="closing">
     <div class="arabic shine">جزاكم الله خيرا</div>
     <div class="ornament-row"><span class="rule"></span>
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"></path></svg>
       <span class="rule"></span>
     </div>
     <h3>Najib &amp; Norasikin</h3>
@@ -538,12 +728,24 @@
 
 </div>
 
-<audio id="bgMusic" loop preload="auto">
+
+<div class="wish-success" id="wishSuccess" role="dialog" aria-modal="true" aria-labelledby="wishSuccessTitle" aria-hidden="true">
+  <div class="wish-success-card" id="wishSuccessCard">
+    <div class="wish-success-seal" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"></path></svg>
+    </div>
+    <div class="eyebrow shine" style="margin-top:18px;">Terima Kasih</div>
+    <h3 id="wishSuccessTitle">WhatsApp Dibuka</h3>
+    <p id="wishSuccessMessage">Ucapan anda telah disediakan di WhatsApp. Tekan Send untuk menghantarnya kepada pengantin.</p>
+  </div>
+</div>
+
+<audio id="bgMusic" loop="" preload="auto">
   <source src="https://commons.wikimedia.org/wiki/Special:FilePath/Oud_music_by_Andy_R._Jordan_2v2.mp3" type="audio/mpeg">
 </audio>
 <button id="musicToggle" aria-label="Main / henti muzik latar">
   <span class="eq" id="eqBars"><span></span><span></span><span></span><span></span></span>
-  <svg id="musicIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+  <svg id="musicIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
 </button>
 
 <script>
@@ -618,7 +820,7 @@
   });
 
   // scroll reveal
-  const revealEls = document.querySelectorAll('.event-card, .savedate');
+  const revealEls = document.querySelectorAll('.event-card, .savedate, .wish-card');
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
   }, { threshold:.3 });
@@ -671,6 +873,203 @@
       tiltName.style.transform = `rotateY(${x*6}deg) rotateX(${-y*4}deg)`;
     }, { passive:true });
   }
+
+  // calendar export: mobile-safe .ics files with built-in reminders
+  const calendarEvents = {
+    akad: {
+      fileName:'akad-nikah-najib-norasikin-2026-09-04.ics',
+      title:'Akad Nikah — Najib & Norasikin',
+      start:'20260904T000000Z',
+      location:'Masjid, Pejabat Agama Islam Daerah Segamat',
+      url:'https://www.google.com/maps/search/?api=1&query=Masjid%20Pejabat%20Agama%20Islam%20Daerah%20Segamat',
+      description:'Akad Nikah Muhammad Najib Ilman bin Sharuddin & Norasikin binti Rosli. Masa: 8.00 pagi.',
+      alarms:['-P1D','-PT2H']
+    },
+    resepsi: {
+      fileName:'resepsi-najib-norasikin-2026-09-05.ics',
+      title:'Majlis Resepsi — Najib & Norasikin',
+      start:'20260905T023000Z',
+      end:'20260905T070000Z',
+      location:'No. 437, Jalan Tembusu, Felda Medoi',
+      url:'https://maps.app.goo.gl/Q4hhApuQHZq1kgeY9?g_st=ac',
+      description:'Majlis Resepsi Najib & Norasikin. Masa: 10.30 pagi – 3.00 petang.',
+      alarms:['-P1D','-PT2H']
+    },
+    'kenduri-lelaki': {
+      fileName:'kenduri-keluarga-lelaki-najib-norasikin-2026-12-27.ics',
+      title:'Kenduri Kahwin — Pihak Keluarga Lelaki',
+      allDayStart:'20261227',
+      allDayEnd:'20261228',
+      location:'Butiran lokasi akan dikongsikan kemudian',
+      description:'Kenduri kahwin pihak keluarga lelaki Najib & Norasikin. Butiran penuh akan dikongsikan kemudian.',
+      alarms:['-P7D','-P1D']
+    }
+  };
+
+  function escapeICS(value){
+    return String(value || '')
+      .replace(/\\/g,'\\\\')
+      .replace(/\n/g,'\\n')
+      .replace(/,/g,'\\,')
+      .replace(/;/g,'\\;');
+  }
+
+  function makeICS(eventKey){
+    const event = calendarEvents[eventKey];
+    if(!event) return null;
+    const stamp = new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
+    const uid = `${eventKey}-najib-norasikin-2026@invitation.local`;
+    const lines = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Najib & Norasikin//Wedding Invitation//MS',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      `UID:${uid}`,
+      `DTSTAMP:${stamp}`,
+      `SUMMARY:${escapeICS(event.title)}`,
+      `DESCRIPTION:${escapeICS(event.description)}`,
+      `LOCATION:${escapeICS(event.location)}`
+    ];
+    if(event.url) lines.push(`URL:${event.url}`);
+    if(event.allDayStart){
+      lines.push(`DTSTART;VALUE=DATE:${event.allDayStart}`);
+      lines.push(`DTEND;VALUE=DATE:${event.allDayEnd}`);
+    } else {
+      lines.push(`DTSTART:${event.start}`);
+      if(event.end) lines.push(`DTEND:${event.end}`);
+    }
+    event.alarms.forEach(trigger=>{
+      lines.push('BEGIN:VALARM');
+      lines.push(`TRIGGER:${trigger}`);
+      lines.push('ACTION:DISPLAY');
+      lines.push(`DESCRIPTION:${escapeICS('Peringatan: ' + event.title)}`);
+      lines.push('END:VALARM');
+    });
+    lines.push('END:VEVENT','END:VCALENDAR');
+    return { content:lines.join('\r\n'), fileName:event.fileName };
+  }
+
+  function saveCalendarEvent(eventKey){
+    const calendarFile = makeICS(eventKey);
+    if(!calendarFile) return;
+    const blob = new Blob([calendarFile.content], {type:'text/calendar;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = calendarFile.fileName;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 1200);
+  }
+
+  document.querySelectorAll('[data-calendar-event]').forEach(button=>{
+    button.addEventListener('click', ()=> saveCalendarEvent(button.dataset.calendarEvent));
+  });
+
+  // wishes: safe local persistence in this standalone HTML.
+  // To collect wishes from multiple guests centrally, connect a server/API endpoint here.
+  const WISH_STORAGE_KEY = 'najibNorasikinWeddingWishes';
+  const wishForm = document.getElementById('wishForm');
+  const guestName = document.getElementById('guestName');
+  const guestWish = document.getElementById('guestWish');
+  const wishCounter = document.getElementById('wishCounter');
+  const wishNote = document.getElementById('wishNote');
+  const wishSuccess = document.getElementById('wishSuccess');
+  const wishSuccessMessage = document.getElementById('wishSuccessMessage');
+  let successTimer = null;
+
+  function updateWishCounter(){
+    wishCounter.textContent = `${guestWish.value.length} / 320`;
+  }
+  guestWish.addEventListener('input', updateWishCounter);
+
+  function saveWishLocally(entry){
+    try{
+      const existing = JSON.parse(localStorage.getItem(WISH_STORAGE_KEY) || '[]');
+      const list = Array.isArray(existing) ? existing.slice(-49) : [];
+      list.push(entry);
+      localStorage.setItem(WISH_STORAGE_KEY, JSON.stringify(list));
+      return true;
+    } catch(error){
+      return false;
+    }
+  }
+
+  function showWishSuccess(name){
+    wishSuccessMessage.textContent = `${name}, ucapan anda telah disediakan di WhatsApp +60 17-630 6477. Tekan Send di WhatsApp untuk menghantarnya.`;
+    wishSuccess.classList.add('show');
+    wishSuccess.setAttribute('aria-hidden','false');
+    clearTimeout(successTimer);
+    successTimer = setTimeout(hideWishSuccess, 3200);
+  }
+
+  function hideWishSuccess(){
+    wishSuccess.classList.remove('show');
+    wishSuccess.setAttribute('aria-hidden','true');
+  }
+
+  wishSuccess.addEventListener('click', hideWishSuccess);
+  document.addEventListener('keydown', e=>{
+    if(e.key === 'Escape' && wishSuccess.classList.contains('show')) hideWishSuccess();
+  });
+
+  wishForm.addEventListener('submit', event=>{
+    event.preventDefault();
+    const name = guestName.value.trim();
+    const wish = guestWish.value.trim();
+
+    if(name.length < 2){
+      wishNote.textContent = 'Sila masukkan nama anda.';
+      guestName.focus();
+      return;
+    }
+    if(wish.length < 3){
+      wishNote.textContent = 'Sila tuliskan ucapan atau doa terlebih dahulu.';
+      guestWish.focus();
+      return;
+    }
+
+    // Keep a local copy when browser storage is available, but never block WhatsApp delivery.
+    saveWishLocally({
+      id:(window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      name:name.slice(0,60),
+      wish:wish.slice(0,320),
+      createdAt:new Date().toISOString()
+    });
+
+    const whatsappNumber = '60176306477';
+    const whatsappMessage = [
+      'Assalamualaikum Najib & Norasikin,',
+      '',
+      `Nama: ${name.slice(0,60)}`,
+      '',
+      'Ucapan / Doa:',
+      wish.slice(0,320),
+      '',
+      '— Dihantar melalui kad jemputan perkahwinan'
+    ].join('\n');
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
+    wishNote.textContent = '';
+    showWishSuccess(name);
+
+    // This submit is a user gesture, so opening WhatsApp here is the most reliable browser-safe flow.
+    // WhatsApp itself still requires the guest to tap Send; a web page cannot silently send a message.
+    const whatsappWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    if(!whatsappWindow){
+      // Popup-blocker fallback: navigate the current tab to WhatsApp.
+      window.location.href = whatsappUrl;
+    }
+
+    wishForm.reset();
+    updateWishCounter();
+  });
+
 </script>
-</body>
-</html>
+
+
+</body></html>
